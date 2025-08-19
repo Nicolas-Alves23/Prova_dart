@@ -1,6 +1,14 @@
 import 'dart:io';
 
 void main(){
+  // mensagem de forma de pagamento
+  String forma_pag = """
+    Me informe a forma de pagamento:
+            1 - Crédito
+            2 - Débito
+            3 - Pix
+            4 - Dinheiro
+""";
   // mensagem de boas vindas personalizada
   String msg_boasvindas = """
 
@@ -137,7 +145,23 @@ print("\nResumo final do carrinho:");
 carrinho.forEach((produto, quantidade) {
   print("${produto.nome} | Quantidade: $quantidade | Preço unitário: R\$${produto.preco.toStringAsFixed(2)} | Total: R\$${(produto.preco * quantidade).toStringAsFixed(2)}");
 });
-    
+
+print(forma_pag); 
+int opcao = int.parse(stdin.readLineSync()!);
+
+switch (opcao) {
+  case 1:
+    break;
+  case 2:
+    break;
+  case 3:
+    break;
+  case 4:
+    break;
+  
+  default:
+}
+
   }
   else{
     print("FLW");
@@ -236,7 +260,6 @@ String? validarDocumento (String? value){
   return null; // válido
 }
 
-
 void adicionarAoCarrinho(Map<Produto, int> carrinho, Produto produto, int quantidade) {
   if (quantidade > produto.quantidade) {
     print("Não há estoque suficiente para ${produto.nome}. Estoque atual: ${produto.quantidade}");
@@ -258,6 +281,7 @@ void adicionarAoCarrinho(Map<Produto, int> carrinho, Produto produto, int quanti
 
 void limparTerminal() {
   // Código ANSI para limpar a tela e colocar o cursor no topo
+  // Para deixar a vizualização melhor
   print('\x1B[2J\x1B[0;0H');
 }
 
