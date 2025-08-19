@@ -151,12 +151,16 @@ int opcao = int.parse(stdin.readLineSync()!);
 
 switch (opcao) {
   case 1:
+      print("Você vai escolheu o método de pagamento no Crédito");
     break;
   case 2:
+      print("Você vai escolheu o método de pagamento no Débito");
     break;
   case 3:
+      print("Você vai escolheu o método de pagamento no Pix");
     break;
   case 4:
+      print("Você vai escolheu o método de pagamento no Dinheiro");
     break;
   
   default:
