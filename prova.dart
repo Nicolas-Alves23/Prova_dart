@@ -103,16 +103,17 @@ while (true) {
   }
 
   print("\nDigite o código do produto que deseja adicionar ao carrinho (ou '0' para finalizar):");
-  String? inputCodigo = stdin.readLineSync();
-  if (inputCodigo == '0') break; // O código para no final 
+  int inputCodigo = int.parse(stdin.readLineSync()!); // recebendo o input
 
-  int? codigoProduto = int.tryParse(inputCodigo ?? '');
-  if (codigoProduto == null || !inventario.containsKey(codigoProduto)) {
+  if (inputCodigo == 0) break; // Parando o while
+
+  // Caso seja um valor que não seja congruente com o inventario
+  if (inputCodigo == null || !inventario.containsKey(inputCodigo)) {
     print("Código inválido. Tente novamente.");
     continue;
   }
 
-  Produto produtoSelecionado = inventario[codigoProduto]!;
+  Produto produtoSelecionado = inventario[inputCodigo]!;
 
   print("Digite a quantidade desejada:");
   String? inputQtd = stdin.readLineSync();
@@ -127,6 +128,8 @@ while (true) {
   print("\nDeseja adicionar mais produtos? (sim/não)");
   String? continuar = stdin.readLineSync();
   if (continuar?.toLowerCase() != 'sim') break;
+
+  limparTerminal();
 }
 
 // Mostra o carrinho final
@@ -251,6 +254,11 @@ void adicionarAoCarrinho(Map<Produto, int> carrinho, Produto produto, int quanti
   produto.quantidade -= quantidade;
 
   print("$quantidade ${produto.nome} adicionados ao carrinho.");
+}
+
+void limparTerminal() {
+  // Código ANSI para limpar a tela e colocar o cursor no topo
+  print('\x1B[2J\x1B[0;0H');
 }
 
 // ━═━═━═━┤Make by Nicolas-Alves23├━═━═━═━  
