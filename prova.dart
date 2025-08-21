@@ -72,11 +72,6 @@ Você acabou de chegar na Star games
    14: Produto("Zelda: Breath of the Wild (Switch)", 299.00, 9),
    15: Produto("Mario Party Superstars (Switch)", 249.00, 10),
 
-    // Acessórios
-    16: Produto("Headset Gamer RGB", 350.00, 25),
-    17: Produto("Mouse Gamer RGB", 250.00, 30),
-    18: Produto("Teclado Mecânico Gamer", 450.00, 20),
-    19: Produto("Cadeira Gamer", 1200.00, 5),
   };
   // forEach para print do estoque
   inventario.forEach((codigo, produto) => print("━═━═━═━┤$codigo -> $produto├━═━═━═━ ,\n")); 
@@ -93,6 +88,8 @@ if (escolha == "sim") {
     mostrarDados(cliente.nome, cliente.documento); // Print com nome do Cliente e Documento
 
     Map<Produto, int> carrinho = {}; // iniciando o carrinho do cliente caso sua escolha seja sim 
+
+    double total_carrinho = 0.0;
 
 while (true) {
   // Repetição de carrinho 
@@ -140,37 +137,93 @@ while (true) {
   limparTerminal();
 }
 
+
 // Mostra o carrinho final
 print("\nResumo final do carrinho:");
 carrinho.forEach((produto, quantidade) {
   print("${produto.nome} | Quantidade: $quantidade | Preço unitário: R\$${produto.preco.toStringAsFixed(2)} | Total: R\$${(produto.preco * quantidade).toStringAsFixed(2)}");
+   total_carrinho += produto.preco * quantidade;
 });
+
+print("\nO preço total à pagar é = R\$${total_carrinho.toStringAsFixed(2)}\n");
 
 print(forma_pag); 
 int opcao = int.parse(stdin.readLineSync()!);
 
-switch (opcao) {
-  case 1:
-      print("Você vai escolheu o método de pagamento no Crédito");
-    break;
-  case 2:
-      print("Você vai escolheu o método de pagamento no Débito");
-    break;
-  case 3:
-      print("Você vai escolheu o método de pagamento no Pix");
-    break;
-  case 4:
-      print("Você vai escolheu o método de pagamento no Dinheiro");
-    break;
+  switch (opcao) {
+    case 1:
+      print("Você escolheu o método de pagamento no Crédito");
+      print("Deseja parcelar? (Ex: 2x, 3x...)");
   
-  default:
+      break;
+
+    case 2:
+      print("Você escolheu o método de pagamento no Débito");
+      print("Pagamento será feito à vista.");
+      print("Preço = R\$${total_carrinho.toStringAsFixed(2)}\n");
+      Recibo(carrinho, cliente.nome, total_carrinho);
+      break;
+
+    case 3:
+      print("Você escolheu o método de pagamento no Pix");
+      print("Você só tem a opção de pagar à vista");
+      print("Preço = R\$${total_carrinho.toStringAsFixed(2)}\n");
+      Recibo(carrinho, cliente.nome, total_carrinho);
+      break;
+
+    case 4:
+      print("Você escolheu o método de pagamento no Dinheiro");
+      print("Preço = R\$${total_carrinho.toStringAsFixed(2)}");
+
+      double valorPago = 0.0;
+
+      while (valorPago < total_carrinho) {
+        stdout.write("Digite o valor entregue pelo cliente: R\$ ");
+        String? entrada = stdin.readLineSync();
+
+        if (entrada == null || entrada.isEmpty) {
+          print("Valor inválido, tente novamente.");
+          continue;
+        }
+
+        double? dinheiro = double.tryParse(entrada.replaceAll(",", "."));
+        if (dinheiro == null) {
+          print("Entrada inválida! Digite apenas números.");
+          continue;
+        }
+
+        valorPago = dinheiro;
+
+        if (valorPago < total_carrinho) {
+          print("Valor insuficiente! Faltam R\$${(total_carrinho - valorPago).toStringAsFixed(2)}");
+        }
+      }
+
+      double troco = valorPago - total_carrinho;
+      print("Valor pago: R\$${valorPago.toStringAsFixed(2)}");
+      print("Troco: R\$${troco.toStringAsFixed(2)}\n");
+
+      Recibo(carrinho, cliente.nome, total_carrinho);
+
+    default:
+      print("Método de pagamento inválido! Escolha entre 1 a 4.");
+  }
 }
 
-  }
   else{
     print("FLW");
   }
+  }
 
+
+
+void Recibo (carrinho, nome, total_carrinho){
+  print("--------------------RECIBO--------------------\n");
+  carrinho.forEach((produto , quantidade){
+    print("${produto.nome} | Quantidade: $quantidade | Preço unitário: R\$${produto.preco.toStringAsFixed(2)} | Total: R\$${(produto.preco * quantidade).toStringAsFixed(2)}");
+  });
+  print("Valor pago = R\$${total_carrinho.toStringAsFixed(2)} ");
+  print("Muito obrigado pela compra $nome");
 }
 
 void mostrarDados (nome , documento){
