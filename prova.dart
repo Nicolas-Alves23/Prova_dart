@@ -74,7 +74,7 @@ Você acabou de chegar na Star games
 
   };
   // forEach para print do estoque
-  inventario.forEach((codigo, produto) => print("━═━═━═━┤$codigo -> $produto├━═━═━═━ ,\n")); 
+  inventario.forEach((codigo, produto) => print("━═━═━═━┤$codigo -> $produto├━═━═━═━ \n")); 
 
   // Perguntando para o usuário se ele deseja comprar na loja
   print("Esse é o nosso estoque, quer comprar conosco? (sim/não)");
@@ -106,6 +106,9 @@ while (true) {
       print("${produto.nome} | Quantidade: $quantidade | Preço unitário: R\$${produto.preco.toStringAsFixed(2)} | Total: R\$${(produto.preco * quantidade).toStringAsFixed(2)}");
     });
   }
+
+  print("\n Estoque \n");
+  inventario.forEach((codigo, produto) => print("━═━═━═━┤$codigo -> $produto├━═━═━═━ ,\n")); 
 
   print("\nDigite o código do produto que deseja adicionar ao carrinho (ou '0' para finalizar):");
   int inputCodigo = int.parse(stdin.readLineSync()!); // recebendo o input
@@ -153,7 +156,7 @@ int opcao = int.parse(stdin.readLineSync()!);
   switch (opcao) {
     case 1:
       print("Você escolheu o método de pagamento no Crédito");
-      print("Deseja parcelar? (Ex: 2x, 3x...)");
+      print("Pagamento à vista somente: R\$${total_carrinho.toStringAsFixed(2)}");
   
       break;
 
@@ -279,12 +282,12 @@ Cliente criarCliente() {
       print("Repita e passe o seu documento e nome novamente \n");
     }
 
-    if(errodocuments != null){
+    if(errodocuments != null ){
       print("Erro referente a documentos:$errodocuments");
       print("Repita e passe o seu documento e nome novamente \n");
     }
 
-  } while (erro != null); // repete enquanto houver erro
+  } while (erro != null || errodocuments != null); // repete enquanto houver erro
 
   print("Cliente criado com sucesso! Nome: $nome \n");
   return Cliente (nome!, documento!);
@@ -304,18 +307,23 @@ String? validarNome(String? value) {
   return null; // válido
 }
 
-String? validarDocumento (String? value){
-    if (value == null || value.trim().isEmpty) {
-    return "Digite seu nome";
+String? validarDocumento(String? value) {
+  // Checa se o valor é nulo ou vazio
+  if (value == null || value.trim().isEmpty) {
+    return "Digite seu documento";
   }
-  final regex = RegExp(r'^[0-9]+$'); // aceita somente números
+
+  // Regex para aceitar somente números
+  final regex = RegExp(r'^[0-9]+$');
 
   if (!regex.hasMatch(value)) {
     return "Somente números são permitidos";
   }
 
-  return null; // válido
+  // Se passou nas validações, retorna null (válido)
+  return null;
 }
+
 
 void adicionarAoCarrinho(Map<Produto, int> carrinho, Produto produto, int quantidade) {
   if (quantidade > produto.quantidade) {
